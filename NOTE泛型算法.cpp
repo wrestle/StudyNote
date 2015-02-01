@@ -6,7 +6,7 @@
     泛型算法是依赖于运算符(operator)的,它的运算是依据迭代器(iterator),而不是容器(container)自身支持的运算.
     因为算法 并不改变 操作容器的大小.有一个不算例外的例外就是(insertor iterator的一种),可以改变(添加)元素进
     容器,但这也是迭代器做的，而算法并没有作用.
-01. Read-Only 算法{ <numeric>:accumulate <algorithm>:find ...}
+01. 只读(Read-Only)算法{ <numeric>:accumulate <algorithm>:find ...}
     accumulate(cbegin_iterator,cend_iterator,initial_value);//initial_value即在迭代器范围内所有数字相加的结果上再加上它的值(先加它).
     find(cbegin_iterator,cend_iterator,find_value);//find_value就是要在迭代器范围内寻找的值,找到则返回位置迭代器，否则就返回cend_iterator.
     find_if(cbegin_iterator,cend_iterator,_predicate);//见04.返回第一个符合第三个参数的iterator
@@ -16,7 +16,7 @@
     Write 算法{ fill...}
     fill(beg_iterator,end_iterator,Like_to_fill);//Like_to_fill是一个可以被转换为该容器内的类型的值，该范围内的值会全部被替换为它.
     fill_n(beg_iterator,range,Like_to_fill);//range是要进行的范围,但是不能超出该容器的实际范围(实际大小).
-02. insert iterator {headfile <iterator>}
+02. 插入迭代器 insert iterator {headfile <iterator>}
     back_inserter();//一个用来绑定容器的函数，使用其的目的是产生back_push()的效果.
     fill_n(back_inserter(container),range,Like_to_fill);//此时即使container是一个空容器，此语句依旧可行，而上例则不行.
 03. 拷贝算法 Copy Algorithms { copy replace replace_copy...}
@@ -33,3 +33,17 @@
     unique(beg_iterator,end_iterator);//注意，做用后会改变原容器的内容,其作用是:
                                       //非重复的项迁移至前方，覆盖或停留重复的项，返回一个iterator,指向最后一个不重复项的后面一项.
 05. Lambdas Expression
+    泛型算法能够使用任何可调用的对象(callable object)或者表达式,比如函数,或者或者函数指针,而Lambdas Expression也是
+    [采集变量列表](参数列表) -> return type { 函数功能体 } //这就是表达式的组成，其中第二，第三部分可以没有，第一部分可以放空
+    它能被看作是一个无名的，内联的函数,但是它又可以在函数的内部定义！(想用的时候就定义),但是它的参数列表必须匹配,它没有默认参数.
+    就像普通函数一样,他也拥有,参数列表,函数体,返回类型(使用新标准 (...) -> return type),以及独有的 [可以放空,但符号必须有] 采集变量列表
+    /*************************************************************************/
+    void te_fun(const std::string &s, size_t v){
+    ...//Something Useful
+    find_if(vec.begin(),vec.end(),
+             [v](const std::string & s) { return s.size() > v; } );
+    ...//Something Useful
+   }
+   /*************************************************************************/
+   Lambdas Expression的返回类型可以省略,由函数体的代码自动推断,也可以显式定义.
+06. 
