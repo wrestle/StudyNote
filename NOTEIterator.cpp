@@ -24,4 +24,14 @@
 (3).  Reverse iterator
 04. 由rbegin(),rend(),crbegin(),crend()返回,当对此种迭代器做递增操作时,它产生的效果是使该迭代器向当前位置之前的位置移动.
     但是需要注意的是forward_list 和 stream 是不可以生成reverse iterator的.
-05. 记住,reverse iterator是相反方向的,打印的顺序也是! .base()成员函数能有逆转它成员正常的iterator.          
+05. 记住,reverse iterator是相反方向的,打印的顺序也是! .base()成员函数能有逆转它成员正常的iterator.
+
+任何算法的大部分性能来自传递的(pass)iterator提供的操作,能分为五大类
+{Input iterator/Output iterator/Forward iterator/Bidirectional iterator/Random-access iterator}
+而传递一个错误(lower than validity)等级(hierarchy)的iterator是一个错误,因为它不能正确的提供应有的功能.
+例如replace_copy() 需要写(write)操作,但是你传递给他一个只读的iterator就会造成错误,但很多编译器不会报错.
+
+同样的只读的iterator最好用在 single-pass 的算法,即只允许iterator的作用发生在算法上,而不允许算法的作用发生在iterator的目标上.
+算法命名的意义: 有的算法拥有另一个版本,比如find() find_if()，他们实现相似的功能,但是行为不同,之所以不用重载是为了防止二义性的发生
+_if   : 函数名字后跟_if表示 当此参数的返回值为true时,此算法成立.
+_copy : 函数名字后面跟_copy表示,算法作用的结果并不返回输入容器(或者输入迭代器),而是在另一个位置(destination)输入.
