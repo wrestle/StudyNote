@@ -16,14 +16,14 @@
   //                                    Tips:当然，这里使用 const 也是可以编译通过的.毕竟C++中本来就建议使用 const 来替代 #define.
   //double arr[period];                 ok,这是可行的.
 09. 即使一个(const static)成员在类主体内被初始化了，我们依旧应该在 类外 定义(define)它
-    constexpr int period;             //此时在类体外(outside class),但不给他初始化的值(initializer).
+    constexpr int period;             //此时在类体外(outside class),但不给他初始化的值(initializer),不要写上static关键字.
 
 10. 我们可以让一个静态成员用在构造函数(constructor)的形参中,让它充当默认值(default argument),但非静态成员就不行. 第 25 行
 /*******************************************************************************/
 class Account{
 public:
   Account(double catch = interestRate);              //构造函数
-  void calculate(){amount += amount * interestRate;} //成员函数
+  void calculate(){amount += amount * interestRate;} //inline成员函数
   static double rate(){return interestRate;}         //inline静态成员函数
   static void rate(double);                          //静态成员函数
 private:
