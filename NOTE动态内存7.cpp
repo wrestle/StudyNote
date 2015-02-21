@@ -17,3 +17,5 @@
                                                                //下标运算[i],都不提供,我们只能通过 .get()
                                                                //函数来间接进行递增以此来操作元素.
       上述两种使用,都要在最后解除智能指针的绑定,ps.release(),ps1.reset().
+03.   allocator 类: <memory>
+      allocator是一个模板类,它提供一个 介于被使用和未分配之间的状态的(raw,unconstructed) 内存
