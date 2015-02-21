@@ -14,7 +14,7 @@
       直接初始化(Direct initialization)则是让编译器自己选择合适的匹配函数来创建函数.
 02.   拷贝赋值构造函数 就是一个重载的运算符(operator)
       它的作用就是把右值(right-hand)的每一个非静态成员赋给(assign to)左值对象(left-hand object),数组则把其中
-      每一个元素都赋给右值,而不仅仅是拷贝地址.
+      每一个元素都赋给左值,而不仅仅是拷贝地址.
       如果没有显式定义拷贝赋值构造函数(Copy-Assignment Constructor),那么编译器自己生成.
       ------------------------------------------------------------------------------
       M_class& M_class::operator=(const M_class &rhs)
@@ -33,15 +33,15 @@
      当我们在类声明中给成员函数加上 = default,那么就是让 编译器去生成这个函数,并且设为内联.
      当我们在类成员的定义的时候加上 = default,那么就是让这个函数不是内联.其他与上句相同.
      class Mclass{public: Mclass() = default; Mclass &operator=(const Mclass&rhs);};
-     Mclass &operator=(const Mclass&rhs) = default;
+     Mclass& Mclass::operator=(const Mclass&rhs) = default;
 05.  C++11中 = delete 让我们能够关闭某些类功能,如拷贝复制.
      C++11之前,我们想关闭某些功能只能将其声明为 private, 并且不定义它.
      = delete 必须出现在类的声明中,并且能用在类的任何函数上,但是不要在析构函数上使用它.
      如果类中的成员无法(默认构造, 拷贝, 赋值, 销毁),那么该类也会对他的相应成员函数进行 = delete
      如果一个类成员是 const 或者 引用, 那么他的拷贝赋值运算符( = ) 会被自动的 = delete.
 06.  对于拷贝复制我们有两种理解,一直从 C 语言延续,
-     (pointerlike)共享对象(多个类共用一个存储内存),
-     (valuelike)独立对象(不同类使用不同的存储内存),一般情况下我们都希望在赋值,拷贝的时候出现的是valuelike.
+     (pointerlike)共享对象(多个类对象共用一个存储内存),
+     (valuelike)独立对象(不同类对象使用不同的存储内存),一般情况下我们都希望在赋值,拷贝的时候出现的是valuelike.
      为了实现它,我们需要完善三个方面:
      (1) 一个(copy constructor),拷贝整个内存块,而不仅仅是拷贝内存地址.
      (2) 一个(destructor)去释放我们动态分配内存块.
