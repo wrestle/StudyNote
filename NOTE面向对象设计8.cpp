@@ -71,5 +71,22 @@
       的钱是你父母给的,你可以随意用这些到手的钱,但是你不能随意使用你父母卡里的钱]
         3.在面向对象设计中,我们在两个地方使用 (public, protected, private) 一种是成员声明
       另一种则是类的继承,public 代表正常继承可继承的成员(public 和 protected),private 代表
-      继承所有可继承的成员,并将他们变成private 成员.protected 同理.
-        4.
+      继承所有可继承的成员,并将他们变成private 成员.[protected 同理.]
+        4.友元(friend)关系无法被继承,也无法被迁移(transitive),例如基类的友元类无法拥有特权访
+      问继承类的(protected, private)成员.但是访问基类的(protected, private)成员还是可以的,
+      即使是在继承类对象中(即继承过来的成员可以由这个友元类访问).总之只要是属于基类的成员,友元类都能
+      访问,即便是被继承了,但是继承类自己新的成员无法被该友元类访问.
+        5.class base{public:    std::size_t size() const {return n;}
+                     protected: std::size_t n;}
+          class deri : private base{//此处使用private,所有继承成员转为private
+           public: using base::size;//但是这里我们使用using关键字,重新调整了继承成员的
+        protected: using base::n;   //使用权限,这是可行的.
+      }                             //注:不一定需要按照原来的权限.
+        6.一个类的成员(类声明定义而不是继承来的)只可能由它自己或者其继承类访问,若是类拥有基类,其基类
+      是无法访问该类独有的成员的,因为成员搜索机制无法找到该成员(在动态绑定时需注意):
+      deri de_cl;             //deri为base的继承类
+      deri* de_clp = &de_cl;  //假设deri中定义了一个public接口 test()
+      base* ba_clp = &de_cl;
+      de_clp->test();         //可以
+      ba_clp->test();         //不行!!因为成员搜索机制在base类中找不到test这个成员
+                              //即使de_clp 和 ba_clp值相等,但类型不同.
