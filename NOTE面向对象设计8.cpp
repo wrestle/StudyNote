@@ -86,7 +86,7 @@
         6.一个类的成员(类声明定义而不是继承来的)只可能由它自己或者其继承类访问,若是类拥有基类,其基类
       是无法访问该类独有的成员的,因为成员搜索机制无法找到该成员(在动态绑定时需注意):
       deri de_cl;             //deri为base的继承类
-      deri* de_clp = &de_cl;  //假设deri中定义了一个public接口 test()
+      deri* de_clp = &de_cl;  //假设deri中新定义了一个public接口 test()
       base* ba_clp = &de_cl;
       de_clp->test();         //可以
       ba_clp->test();         //不行!!因为成员搜索机制在base类中找不到test这个成员
@@ -99,5 +99,21 @@
         继承类的拷贝构造函数,需要包涵两部分[1:基类的拷贝构造函数base(deri&). 2:继承类的成员初始化]
       1会将deri对象中基类的部分使用基类默认构造函数初始化一个基类对象,以供继承类使用. 2则是完成
       剩余的初始化工作.
-11.   Derived-Class Assignment Operator
-        
+11.     继承类不能狗继承基类的一系列构造函数(default, copy, move).
+      C++11 标准下,我们可以使用using 关键字去继承基类的构造函数
+      class deri : public base{
+      public: using base::base; //这样就继承了基类的构造函数
+      };
+      Tips:
+        using 用于继承构造函数不会改变构造函数的使用权限
+        using 用于继承构造函数无法分辨explicit或者constexpr
+        using 用于继承构造函数无法继承它的默认参数
+12.   容器和继承
+        容器中不能存放不同类型的元素,导致如果我们把基类和普通类放在一起必要择其一选定容器的类型,
+      很自然的选择了使用基类的类型作为容器的类型,因为(derived-to-base)是合法的.但是如果我们直接
+      将对象(object)存入容器,会导致动态绑定失效,从而使继承变得没有意义.我们能做的,就是将指针存入
+      因为即使是继承类的指针使用基类类型指向,也可以实现动态绑定功能,并且转换是隐式的,不需要显式转换
+      vector<shared_ptr<base>> vec;    //使用普通内建(build-in)指针也可以
+      vec.push_back(make_shared<base>(parm1, parm2));//假设有一个虚函数function
+      vec.push_back(make_shared<deri>(parm1, parm2, parm3));//隐式转换为shared_ptr<base>
+      vec.back()->function();          //使用deri版本的function
