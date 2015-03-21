@@ -47,4 +47,13 @@
       class1& menber_function(para-list);//此时的返回值class1并没有带上模板参数,但相当于
       class1<T>& menber_function(para-list);
 06.   类模板与友元(Class Template and Friends)
+      此处为难点,动手回顾.
+      //假设有两个模板类,称为tem_class1 和 tem_class2
+       1  想让tem_class2访问tem_class1的 protected 和 private 成员的方法就是在
+      tem_class1类体内声明 tem_class2的友元.
+       2  在1之前首先打上 template<typename T> class tem_class1;
+                       template<typename X> class tem_class2;
+       3  定义tem_class1类体,再定义tem_class2类体.
+       4  之后可以在tem_class2类使用tem_class1的protected或者private成员了,通过传递对象
+       进行访问.
       
